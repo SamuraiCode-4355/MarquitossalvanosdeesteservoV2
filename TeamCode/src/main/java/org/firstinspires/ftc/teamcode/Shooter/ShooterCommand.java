@@ -12,7 +12,7 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        shooterSubsystem.setTargetVelocity(velocity);
+        shooterSubsystem.start();
         super.initialize();
     }
 

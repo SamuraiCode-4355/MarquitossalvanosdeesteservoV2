@@ -11,13 +11,14 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 public class ShooterSubsystem extends SubsystemBase {
     private final MotorEx shooterMotor;
     private final PIDFController pidController;
-    private double targetVelocity = 0;
+    private double targetVelocity = 570;
     private double manualPower = 0;
     private boolean pidEnabled = true;
 
     public ShooterSubsystem(HardwareMap hwMap) {
         shooterMotor = new MotorEx(hwMap, "ShooterMotor");
         shooterMotor.setInverted(false);
+        shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         shooterMotor.setRunMode(Motor.RunMode.RawPower);
 
         pidController = new PIDFController(0.01, 0, 0, 0.004);
