@@ -12,15 +12,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private final MotorEx shooterMotor;
     private final PIDFController pidController;
     private double targetVelocity = 0;
-    private double manualPower = 0;
-    private boolean pidEnabled = true;
-
     public ShooterSubsystem(HardwareMap hwMap) {
         shooterMotor = new MotorEx(hwMap, "ShooterMotor");
         shooterMotor.setInverted(false);
         shooterMotor.setRunMode(Motor.RunMode.RawPower);
 
-        pidController = new PIDFController(0.01, 0, 0, 0.004);
+        pidController = new PIDFController(ShooterConfig.kP, ShooterConfig.kI, ShooterConfig.kD, ShooterConfig.kF);
         pidController.setTolerance(30);
     }
 
@@ -29,42 +26,22 @@ public class ShooterSubsystem extends SubsystemBase {
         pidController.setSetPoint(tps);
     }
 
-    public void setManualPower(double power) {
-        manualPower = power;
+    public void start()   {
+        setTargetVelocity(ShooterConfig.targetVelocity);
     }
-
-    public void disablePID() {
-        pidEnabled = false;
-    }
-
-    public void enablePID() {
-        pidEnabled = true;
-        pidController.reset();
-    }
-
-    public void start(){
-        setTargetVelocity(570);
-    }
-    public void stop(){
+    public void stop()    {
         setTargetVelocity(0);
-        manualPower = 0;
     }
 
     public double getVelocity() { return shooterMotor.getVelocity(); }
-    public boolean atTarget()   { return pidEnabled && pidController.atSetPoint(); }
+    public boolean atTarget()   { return pidController.atSetPoint(); }
 
     @Override
     public void periodic() {
-        if (!pidEnabled) {
-            shooterMotor.set(Math.max(-1, Math.min(1, manualPower)));
-            return;
-        }
-
         if (targetVelocity == 0) {
             shooterMotor.set(0);
             return;
         }
-
         double out = pidController.calculate(getVelocity());
         shooterMotor.set(Math.max(-1, Math.min(1, out)));
     }

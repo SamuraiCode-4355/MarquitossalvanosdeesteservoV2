@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,11 +15,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Chasis.ChasisCommand;
 import org.firstinspires.ftc.teamcode.Chasis.ChasisSusbystem;
 import org.firstinspires.ftc.teamcode.Intake.IntakeCommand;
-import org.firstinspires.ftc.teamcode.Intake.IntakeCommandReverse;
 import org.firstinspires.ftc.teamcode.Intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Shooter.Servo.ShooterServoCommand;
 import org.firstinspires.ftc.teamcode.Shooter.Servo.ShooterServoSubsystem;
 import org.firstinspires.ftc.teamcode.Shooter.ShooterCommand;
+import org.firstinspires.ftc.teamcode.Shooter.ShooterConfig;
 import org.firstinspires.ftc.teamcode.Shooter.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.pedro.Drawing;
@@ -37,6 +39,8 @@ public class MainController extends CommandOpMode {
     ShooterServoSubsystem shooterServoSubsystem;
     ConfigureIMU configureIMU;
     Follower follower;
+    TelemetryManager panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+
 
     @Override
     public void initialize() {
@@ -79,11 +83,11 @@ public class MainController extends CommandOpMode {
 
         new Trigger(() ->
                 mechanismController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1
-        ).whileActiveContinuous(new IntakeCommand(intakeSubsystem, shooterSubsystem,mechanismController));
+        ).whileActiveContinuous(new IntakeCommand(intakeSubsystem, mechanismController));
 
         new Trigger(() ->
                 mechanismController.getButton(GamepadKeys.Button.A)
-        ).whileActiveContinuous(new IntakeCommandReverse(intakeSubsystem, mechanismController));
+        ).whileActiveContinuous(new IntakeCommand(intakeSubsystem, mechanismController));
 
         new Trigger(() ->
                 mechanismController.getButton(GamepadKeys.Button.B)
@@ -93,7 +97,7 @@ public class MainController extends CommandOpMode {
 
         new Trigger(() ->
                 mechanismController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1
-        ).whileActiveContinuous(new ShooterCommand(shooterSubsystem));
+        ).whileActiveContinuous(new ShooterCommand(shooterSubsystem, intakeSubsystem));
 
         new InstantCommand(() -> shooterSubsystem.setTargetVelocity(0), shooterSubsystem);
     }
@@ -107,7 +111,8 @@ public class MainController extends CommandOpMode {
         telemetry.addData("Heading Lock", chasisSusbystem.isLockEnabled() ? "ACTIVADO" : "DESACTIVADO");
         telemetry.addData("Heading", configureIMU.getHeading(AngleUnit.DEGREES));
         telemetry.addData("RX", chasisSusbystem.getOutPID());
-        telemetry.addData("Shooter RPM", shooterSubsystem.getVelocity());
+        panelsTelemetry.addData("actual", shooterSubsystem.getVelocity());
+        panelsTelemetry.update(telemetry);
 
         follower.update();
         Drawing.drawRobot(follower.pose());

@@ -14,13 +14,11 @@ public class IntakeCommandReverse extends CommandBase {
     @Override
     public void execute() {
         super.execute();
-        intakeSubsystem.reverse();
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        intakeSubsystem.stop();
     }
     @Override
     public boolean isFinished() {
