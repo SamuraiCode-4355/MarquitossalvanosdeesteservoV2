@@ -9,17 +9,23 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private final MotorEx shooterMotor;
+    private final MotorEx shooterMotor1; //DOWN
+    private final MotorEx shooterMotor2; //UP
     private final PIDFController pidController;
     private double targetVelocity = 570;
     private double manualPower = 0;
     private boolean pidEnabled = true;
 
     public ShooterSubsystem(HardwareMap hwMap) {
-        shooterMotor = new MotorEx(hwMap, "ShooterMotor");
-        shooterMotor.setInverted(false);
-        shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        shooterMotor.setRunMode(Motor.RunMode.RawPower);
+        shooterMotor1 = new MotorEx(hwMap, "ShooterMotorDOWN");
+        shooterMotor1.setInverted(false);
+        shooterMotor1.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        shooterMotor1.setRunMode(Motor.RunMode.RawPower);
+
+        shooterMotor2 = new MotorEx(hwMap, "ShooterMotorUP");
+        shooterMotor2.setInverted(true);
+        shooterMotor2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        shooterMotor2.setRunMode(Motor.RunMode.RawPower);
 
         pidController = new PIDFController(0.01, 0, 0, 0.004);
         pidController.setTolerance(30);
@@ -51,22 +57,23 @@ public class ShooterSubsystem extends SubsystemBase {
         manualPower = 0;
     }
 
-    public double getVelocity() { return shooterMotor.getVelocity(); }
+    public double getVelocity() { return shooterMotor1.getVelocity(); }
     public boolean atTarget()   { return pidEnabled && pidController.atSetPoint(); }
 
     @Override
     public void periodic() {
+        double power;
+
         if (!pidEnabled) {
-            shooterMotor.set(Math.max(-1, Math.min(1, manualPower)));
-            return;
+            power = Math.max(-1, Math.min(1, manualPower));
+        } else if (targetVelocity == 0) {
+            power = 0;
+        } else {
+            double out = pidController.calculate(getVelocity());
+            power = Math.max(-1, Math.min(1, out));
         }
 
-        if (targetVelocity == 0) {
-            shooterMotor.set(0);
-            return;
-        }
-
-        double out = pidController.calculate(getVelocity());
-        shooterMotor.set(Math.max(-1, Math.min(1, out)));
+        shooterMotor1.set(power);
+        shooterMotor2.set(power);
     }
 }
