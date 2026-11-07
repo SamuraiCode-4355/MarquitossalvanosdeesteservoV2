@@ -8,19 +8,18 @@ import org.firstinspires.ftc.teamcode.Shooter.ShooterSubsystem;
 
 public class IntakeCommand extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
-    private GamepadEx controller;
 
 
-    public IntakeCommand(IntakeSubsystem intakeSubsystem, GamepadEx mechanismController) {
+
+    public IntakeCommand(IntakeSubsystem intakeSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
-        this.controller = mechanismController;
         addRequirements(intakeSubsystem);
     }
 
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
+
     @Override
     public void execute(){
         intakeSubsystem.start();

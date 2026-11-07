@@ -12,7 +12,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final MotorEx shooterMotor1; //DOWN
     private final MotorEx shooterMotor2; //UP
     private final PIDFController pidController;
-    private double targetVelocity = 570;
+    private double targetVelocity = ShooterConfig.targetVelocity;
     private double manualPower = 0;
     private boolean pidEnabled = true;
 
@@ -27,8 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotor2.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         shooterMotor2.setRunMode(Motor.RunMode.RawPower);
 
-        pidController = new PIDFController(0.01, 0, 0, 0.004);
-        pidController.setTolerance(30);
+        pidController = new PIDFController(ShooterConfig.kP, ShooterConfig.kI, ShooterConfig.kD, ShooterConfig.kF);
     }
 
     public void setTargetVelocity(double tps) {
@@ -50,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void start(){
-        setTargetVelocity(570);
+        setTargetVelocity(ShooterConfig.targetVelocity);
     }
     public void stop(){
         setTargetVelocity(0);

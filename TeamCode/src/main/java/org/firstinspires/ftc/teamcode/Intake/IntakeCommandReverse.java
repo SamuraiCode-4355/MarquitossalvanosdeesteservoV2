@@ -8,11 +8,9 @@ import org.firstinspires.ftc.teamcode.Shooter.ShooterSubsystem;
 public class IntakeCommandReverse extends CommandBase {
     IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
-    private GamepadEx controller;
 
-    public IntakeCommandReverse(IntakeSubsystem intakeSubsystem,ShooterSubsystem shooterSubsystem, GamepadEx mechanismController) {
+    public IntakeCommandReverse(IntakeSubsystem intakeSubsystem,ShooterSubsystem shooterSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
-        this.controller = mechanismController;
         this.shooterSubsystem = shooterSubsystem;
         addRequirements(intakeSubsystem,shooterSubsystem);
     }

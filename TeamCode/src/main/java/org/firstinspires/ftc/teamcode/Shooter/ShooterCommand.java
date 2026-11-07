@@ -2,12 +2,16 @@ package org.firstinspires.ftc.teamcode.Shooter;
 
 import com.seattlesolvers.solverslib.command.CommandBase;
 
+import org.firstinspires.ftc.teamcode.Intake.IntakeSubsystem;
+
 public class ShooterCommand extends CommandBase {
     ShooterSubsystem shooterSubsystem;
+    IntakeSubsystem intakeSubsystem;
     double velocity;
-    public ShooterCommand(ShooterSubsystem shooterSubsystem){
+    public ShooterCommand(ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem){
         this.shooterSubsystem = shooterSubsystem;
-        addRequirements(shooterSubsystem);
+        this.intakeSubsystem = intakeSubsystem;
+        addRequirements(shooterSubsystem, intakeSubsystem);
     }
 
     @Override
@@ -18,6 +22,12 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if (shooterSubsystem.getVelocity() >= (ShooterConfig.targetVelocity - 20)) {
+            intakeSubsystem.start();
+        }
+        else {
+            intakeSubsystem.stop();
+        }
         super.execute();
     }
 
@@ -29,5 +39,6 @@ public class ShooterCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         shooterSubsystem.stop();
+        intakeSubsystem.stop();
     }
 }
