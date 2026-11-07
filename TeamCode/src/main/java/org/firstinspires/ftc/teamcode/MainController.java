@@ -79,7 +79,7 @@ public class MainController extends CommandOpMode {
 
         new Trigger(() ->
                 mechanismController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1
-        ).whileActiveContinuous(new IntakeCommand(intakeSubsystem));
+        ).whileActiveContinuous(new IntakeCommand(intakeSubsystem, shooterSubsystem));
 
         new Trigger(() ->
                 mechanismController.getButton(GamepadKeys.Button.A)

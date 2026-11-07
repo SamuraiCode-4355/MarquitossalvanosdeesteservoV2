@@ -8,12 +8,13 @@ import org.firstinspires.ftc.teamcode.Shooter.ShooterSubsystem;
 
 public class IntakeCommand extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
+    private final ShooterSubsystem shooterSubsystem;
 
 
-
-    public IntakeCommand(IntakeSubsystem intakeSubsystem) {
+    public IntakeCommand(IntakeSubsystem intakeSubsystem,ShooterSubsystem shooterSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
-        addRequirements(intakeSubsystem);
+        this.shooterSubsystem = shooterSubsystem;
+        addRequirements(intakeSubsystem,shooterSubsystem);
     }
 
 
@@ -23,9 +24,14 @@ public class IntakeCommand extends CommandBase {
     @Override
     public void execute(){
         intakeSubsystem.start();
+        shooterSubsystem.disablePID();
+        shooterSubsystem.setManualPower(-0.3);
     }
     @Override
     public void end(boolean interrupted) {
+        intakeSubsystem.stop();
+        shooterSubsystem.enablePID();
+        shooterSubsystem.setManualPower(0);
         intakeSubsystem.stop();
     }
 
