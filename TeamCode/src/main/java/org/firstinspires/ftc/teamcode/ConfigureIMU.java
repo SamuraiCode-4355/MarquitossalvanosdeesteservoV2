@@ -15,8 +15,8 @@ public class ConfigureIMU extends SubsystemBase {
         imu = hwMap.get(IMU.class, "IMU");
 
         RevHubOrientationOnRobot RevOrient = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
         );
 
         imu.initialize(new IMU.Parameters(RevOrient));

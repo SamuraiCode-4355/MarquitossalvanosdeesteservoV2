@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.Intake.Servo;
+package org.firstinspires.ftc.teamcode.Shooter.Servo;
 
 import com.seattlesolvers.solverslib.command.CommandBase;
 
-public class IntakeCommandSubsystem extends CommandBase {
-    private final IntakeServoSubsystem servoSubsystem;
-    public IntakeCommandSubsystem(IntakeServoSubsystem servoSubsystem){
+public class ShooterServoCommand extends CommandBase {
+    private final ShooterServoSubsystem servoSubsystem;
+    public ShooterServoCommand(ShooterServoSubsystem servoSubsystem){
         this.servoSubsystem = servoSubsystem;
         addRequirements(servoSubsystem);
     }
@@ -17,12 +17,12 @@ public class IntakeCommandSubsystem extends CommandBase {
     @Override
     public void execute() {
         super.execute();
-        servoSubsystem.right();
+        servoSubsystem.start();
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        servoSubsystem.left();
+        servoSubsystem.stop();
     }
 }

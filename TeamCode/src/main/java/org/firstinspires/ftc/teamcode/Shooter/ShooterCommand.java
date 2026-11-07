@@ -10,7 +10,7 @@ public class ShooterCommand extends CommandBase {
     public ShooterCommand(ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem){
         this.shooterSubsystem = shooterSubsystem;
         this.intakeSubsystem = intakeSubsystem;
-        addRequirements(shooterSubsystem);
+        addRequirements(shooterSubsystem, intakeSubsystem);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (shooterSubsystem.getVelocity() >= (ShooterConfig.targetVelocity - 20)){
+        if (shooterSubsystem.getVelocity() >= (ShooterConfig.targetVelocity - 20)) {
             intakeSubsystem.start();
         }
         else {
