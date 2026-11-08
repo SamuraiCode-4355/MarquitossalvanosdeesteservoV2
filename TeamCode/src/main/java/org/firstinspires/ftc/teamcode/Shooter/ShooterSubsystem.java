@@ -14,7 +14,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final PIDFController pidController;
     private double targetVelocity = ShooterConfig.targetVelocity;
     private double manualPower = 0;
-    private boolean pidEnabled = true;
+    private boolean pidEnabled = false;
 
     public ShooterSubsystem(HardwareMap hwMap) {
         shooterMotor1 = new MotorEx(hwMap, "ShooterMotorDOWN");
@@ -50,6 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void start(){
         setTargetVelocity(ShooterConfig.targetVelocity);
+        manualPower = 0.95;
     }
     public void stop(){
         setTargetVelocity(0);

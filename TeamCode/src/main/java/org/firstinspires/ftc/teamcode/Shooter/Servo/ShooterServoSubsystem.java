@@ -15,17 +15,11 @@ public class ShooterServoSubsystem extends SubsystemBase {
         servoCenter.setInverted(true);
     }
     public void start(){
-        servoCenter.set(0.23);
-    }
-    public void stop(){
         servoCenter.set(0);
     }
-//    public int servoCurrentPosition(){
-//        return servoCenter.getCurrentPosition();
-//    }
-//    public double servoDistance(){
-//        return servoCenter.getDistance();
-//    }
+    public void stop(){
+        servoCenter.set(0.35);
+    }
 
     @Override
     public void periodic() {
