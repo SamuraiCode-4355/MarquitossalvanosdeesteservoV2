@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
-@Autonomous(name = "TesteoChidote", group = "Autonomous")
+@Autonomous(name = "Testeoo", group = "Autonomous")
 @Configurable // Panels
 public class AutoPath extends OpMode {
 
@@ -46,7 +46,7 @@ public class AutoPath extends OpMode {
     panelsTelemetry.update(telemetry);
 
     follower = Constants.create(hardwareMap);
-    follower.setPose(p.of(60.000, 9.870, 90.000));
+    follower.setPose(p.of(60.000, 9.402, 90.000));
 
     pathTimer = new ElapsedTime();
     paths = new Paths(follower); // Build paths
@@ -74,18 +74,18 @@ public class AutoPath extends OpMode {
 
     public Paths(Follower follower) {
       DriveToShoot = line(
-        p.of(60.000, 9.870, 0.0),
-        p.of(60.000, 37.621, 0.0)
+              p.of(60.000, 9.402, 0.0),
+              p.of(60.000, 34.115, 0.0)
       ).linear(Math.toRadians(90), Math.toRadians(90));
 
-      line2 = line(p.of(60.000, 37.621, 0.0), p.of(24.541, 37.621, 0.0)).linear(
-        Math.toRadians(90),
-        Math.toRadians(90)
+      line2 = line(p.of(60.000, 34.115, 0.0), p.of(25.243, 34.115, 0.0)).linear(
+              Math.toRadians(90),
+              Math.toRadians(90)
       );
 
-      line3 = line(p.of(24.541, 37.621, 0.0), p.of(60.000, 37.621, 0.0)).linear(
-        Math.toRadians(90),
-        Math.toRadians(90)
+      line3 = line(p.of(25.243, 34.115, 0.0), p.of(60.000, 34.115, 0.0)).linear(
+              Math.toRadians(90),
+              Math.toRadians(90)
       );
     }
   }
