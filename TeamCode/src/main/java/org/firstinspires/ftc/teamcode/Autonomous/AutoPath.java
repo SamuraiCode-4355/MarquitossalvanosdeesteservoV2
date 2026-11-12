@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
-@Autonomous(name = "Testeoo", group = "Autonomous")
+@Autonomous(name = "AutoPath", group = "Autonomous")
 @Configurable // Panels
 public class AutoPath extends OpMode {
 
@@ -46,7 +46,7 @@ public class AutoPath extends OpMode {
     panelsTelemetry.update(telemetry);
 
     follower = Constants.create(hardwareMap);
-    follower.setPose(p.of(60.000, 9.402, 90.000));
+    follower.setPose(p.of(60.600, 24.962, 90.000));
 
     pathTimer = new ElapsedTime();
     paths = new Paths(follower); // Build paths
@@ -68,32 +68,21 @@ public class AutoPath extends OpMode {
   public static class Paths {
 
     private static final PoseFactory p = PoseFactory.degrees();
-    public Path DriveToShoot;
-    public Path line2;
-    public Path line3;
+    public Path line1;
 
     public Paths(Follower follower) {
-      DriveToShoot = line(
-              p.of(60.000, 9.402, 0.0),
-              p.of(60.000, 34.115, 0.0)
-      ).linear(Math.toRadians(90), Math.toRadians(90));
-
-      line2 = line(p.of(60.000, 34.115, 0.0), p.of(25.243, 34.115, 0.0)).linear(
-              Math.toRadians(90),
-              Math.toRadians(90)
-      );
-
-      line3 = line(p.of(25.243, 34.115, 0.0), p.of(60.000, 34.115, 0.0)).linear(
-              Math.toRadians(90),
-              Math.toRadians(90)
-      );
+      // Max speeds are set through Constants.foresightConfig (Pedro's "Modifying Constants").
+      // If the build fails with "cannot find symbol ... foresightConfig", your Constants class needs a public static ForesightConfig foresightConfig that your Follower is built from.
+      line1 = line(p.of(60.600, 24.962, 0.0), p.of(60.600, 36.982, 0.0))
+        .constant(Math.toRadians(90))
+        .with(Constants.foresightConfig.maxVelocityConstraint.at(20.0));
     }
   }
 
   public int autonomousPathUpdate() {
     switch (pathState) {
       case 0:
-        follower.follow(paths.DriveToShoot);
+        follower.follow(paths.line1);
         setPathState(1);
         break;
       case 1:
@@ -102,20 +91,33 @@ public class AutoPath extends OpMode {
         }
         break;
       case 2:
-        follower.follow(paths.line2);
+        follower.hold(follower.pose().withHeading(-1.571));
+        follower.algorithm().reset();
         setPathState(3);
         break;
       case 3:
-        if (!follower.isBusy()) {
+        if (
+          Math.abs(
+            com.pedropathing.utils.Angle.error(
+              follower.pose().heading(),
+              -1.571
+            )
+          ) < 0.01
+        ) {
           setPathState(4);
         }
         break;
       case 4:
-        follower.follow(paths.line3);
+        follower.hold(follower.pose().withHeading(1.571));
+        follower.algorithm().reset();
         setPathState(5);
         break;
       case 5:
-        if (!follower.isBusy()) {
+        if (
+          Math.abs(
+            com.pedropathing.utils.Angle.error(follower.pose().heading(), 1.571)
+          ) < 0.01
+        ) {
           setPathState(6);
         }
         break;
