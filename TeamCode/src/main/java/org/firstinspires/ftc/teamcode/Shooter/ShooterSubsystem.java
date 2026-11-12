@@ -8,6 +8,8 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
+import org.firstinspires.ftc.teamcode.Intake.IntakeSubsystem;
+
 public class ShooterSubsystem extends SubsystemBase {
     private final MotorEx shooterMotor1; //DOWN
     private final MotorEx shooterMotor2; //UP
