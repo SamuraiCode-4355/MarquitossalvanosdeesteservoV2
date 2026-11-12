@@ -15,8 +15,6 @@ import org.firstinspires.ftc.teamcode.Chasis.ChasisSusbystem;
 import org.firstinspires.ftc.teamcode.Intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.Intake.IntakeCommandReverse;
 import org.firstinspires.ftc.teamcode.Intake.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.Shooter.Servo.ShooterServoCommand;
-import org.firstinspires.ftc.teamcode.Shooter.Servo.ShooterServoSubsystem;
 import org.firstinspires.ftc.teamcode.Shooter.ShooterCommand;
 import org.firstinspires.ftc.teamcode.Shooter.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
@@ -34,7 +32,6 @@ public class MainController extends CommandOpMode {
 
     IntakeSubsystem intakeSubsystem;
     ShooterSubsystem shooterSubsystem;
-    ShooterServoSubsystem shooterServoSubsystem;
     ConfigureIMU configureIMU;
     Follower follower;
 
@@ -52,7 +49,6 @@ public class MainController extends CommandOpMode {
         chasisSusbystem = new ChasisSusbystem(hardwareMap, configureIMU);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         shooterSubsystem = new ShooterSubsystem(hardwareMap);
-        shooterServoSubsystem = new ShooterServoSubsystem(hardwareMap);
 
         Drawing.init();
         follower = Constants.create(hardwareMap);
@@ -85,9 +81,6 @@ public class MainController extends CommandOpMode {
                 mechanismController.getButton(GamepadKeys.Button.A)
         ).whileActiveContinuous(new IntakeCommandReverse(intakeSubsystem, shooterSubsystem));
 
-        new Trigger(() ->
-                mechanismController.getButton(GamepadKeys.Button.B)
-        ).whileActiveContinuous(new ShooterServoCommand(shooterServoSubsystem));
 
         //----------------------------/Shooter/----------------------
 
